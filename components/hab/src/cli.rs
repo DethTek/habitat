@@ -687,8 +687,8 @@ fn sub_pkg_build() -> App<'static, 'static> {
         (@arg SRC_PATH: -s --src +takes_value
             "Sets the source path (default: $PWD)")
         (@arg PLAN_CONTEXT: +required +takes_value
-            "A directory containing a `plan.sh` file \
-            or a `habitat/` directory which contains the `plan.sh` file")
+            "A directory containing a `plan.sh` or `plan.ps1` file \
+            or a `habitat/` directory which contains the plan file")
     );
     // Only a truly native/local Studio can be reused--the Docker implementation will always be
     // ephemeral
@@ -701,12 +701,11 @@ fn sub_pkg_build() -> App<'static, 'static> {
         );
     }
 
-    if cfg!(target_os = "linux") {
+    if studio::native_studio_support() {
         sub.arg(
             Arg::with_name("DOCKER")
                 .help(
-                    "Uses a Dockerized Studio for the build (default: Studio uses a chroot on \
-                     linux)",
+                    "Uses a Dockerized Studio for the build",
                 )
                 .short("D")
                 .long("docker"),

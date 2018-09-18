@@ -241,12 +241,19 @@ mod inner {
         }
 
         for arg in args.iter() {
+            let str_arg = arg.to_string_lossy();
+            if str_arg == String::from("-D") {
+                return false;
+            }
+        }
+
+        for arg in args.iter() {
             let str_arg = arg.to_string_lossy().to_lowercase();
             if str_arg == String::from("--windows") || str_arg == String::from("-w") {
                 return true;
             }
         }
 
-        return false;
+        return true;
     }
 }
